@@ -1,6 +1,6 @@
 #include "ComplexPlane.h"
 #include <cmath>
-
+#include <sstream>
 
 ComplexPlane::ComplexPlane(int pixelWidth, int pixelHeight)
 {
@@ -9,7 +9,7 @@ ComplexPlane::ComplexPlane(int pixelWidth, int pixelHeight)
   m_plane_center={0,0};
   m_plane_size={BASE_WIDTH, BASE_HEIGHT * m_aspectRatio};
   m_zoomCount=0;
-  m_State=State::Calculating;
+  m_state=State::Calculating;
   m_vArray.setPrimitiveType(Points);
   m_vArray.resize(pixelWidth* pixelHeight);
   
@@ -20,16 +20,16 @@ void ComplexPlane::draw(RenderTarget& target, RenderStates states) const
   target.draw(m_vArray);
 }
 
-void complexPlane::updateRender()
+void ComplexPlane::updateRender()
 {
-  if(m_State==State::Calculating)
+  if(m_state==State::Calculating)
   {
     for(int i=0; i<m_pixel_size.y; i++)
     {
       for(int j=0; j<m_pixel_size.x; j++)
       {
         m_vArray[j+i*m_pixel_size.x].position = { (float)j,(float)i };
-        Vector2f coordinate=mapPixelToCoords(j,i);
+        Vector2f coordinate=mapPixelToCoords(vector2i(j,i));
         int iteration=countIterations(coordinate);
         Uint8 r;
         Uint8 g;
@@ -38,7 +38,7 @@ void complexPlane::updateRender()
         m_vArray[j+i*m_pixel_size.x].color = { r,g,b };
       }
     }
-    m_state=State::DISPLAYING;
+    m_state=State::Displaying;
   }
 }
   
@@ -48,7 +48,7 @@ void ComplexPlane::zoomIn()
   double x=BASE_WIDTH*pow(BASE_ZOOM, m_zoomCount);
   double y=BASE_HEIGHT*m_aspectRatio*pow(BASE_ZOOM, m_zoomCount);
   m_plane_size={x,y};
-  m_State=State::Calculating;
+  m_state=State::Calculating;
 }
 
 void ComplexPlane::zoomOut()
@@ -57,13 +57,13 @@ void ComplexPlane::zoomOut()
   double x=BASE_WIDTH*pow(BASE_ZOOM, m_zoomCount);
   double y=BASE_HEIGHT*m_aspectRatio*pow(BASE_ZOOM, m_zoomCount);
   m_plane_size={x,y};
-  m_State=State::Calculating;
+  m_state=State::Calculating;
 }
 
 void ComplexPlane::setCenter(Vector2i mousePixel)
 {
   m_plane_center=mapPixelToCoords(mousePixel);
-  m_State=State::Calculating;
+  m_state=State::Calculating;
 }
 
 void ComplexPlane::setMouseLocation(Vector2i mousPixel)
@@ -73,7 +73,7 @@ void ComplexPlane::setMouseLocation(Vector2i mousPixel)
 
 void ComplexPlane::loadText(Text& text)
 {
-  stringstream output;
+  ostringstream output;
   output<<"Mandelbrot Set"<<endl;
   output<<"Center: ("<<m_plane_center.x<<","<<m_plane_center.y<<")"<<endl;
   output<<"Cursor: ("<<m_mouseLocation.x<<","<<m_mouseLocation.y<<")"<<endl;
@@ -81,7 +81,7 @@ void ComplexPlane::loadText(Text& text)
   output<<"Right-click to Zoom out"<<endl;
   text.setString(output.str());
 }
-size_t ComplexPlane::countIterations(Vector2f coord)
+int  ComplexPlane::countIterations(Vector2f coord)
 {
     // Initialize z as the complex number 0 + 0i
     float zReal = 0.0f;
@@ -164,7 +164,7 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel)
 {
   double real=((mousePixel.x*1.0)/m_pixel_size.x)*m_plane_size.x+(m_plane_center.x - m_plane_size.x / 2.0);
-  double imaginary=((m_pixel_size.y-(mousePixel.y*1.0))/(m_pixel_size.y)*m_plane_size.y+(m_plane_center.y -                   m_plane_size.y / 2.0);
-  return Vector2f(real,imagnary);
+  double imaginary=((m_pixel_size.y-(mousePixel.y*1.0))/(m_pixel_size.y)*m_plane_size.y+(m_plane_center.y - m_plane_size.y / 2.0));
+  return Vector2f(real,imaginary);
 }
 
