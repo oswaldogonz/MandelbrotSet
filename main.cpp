@@ -1,12 +1,3 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <iostream>
-#include "ComplexPlane.h"
-
-int main()
-{
-  VideoMode vm(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height);
-
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -21,12 +12,8 @@ int main()
   VideoMode vm(VideoMode::getDesktopMode().width/2, VideoMode::getDesktopMode().height/2);
   RenderWindow window(vm, "Mandelbrot Set", Style::Default);
 
-  ComplexPlane complexPlane(width, height);//figure out how to get height amd width
-  }
+  ComplexPlane plane(width, height);//figure out how to get height amd width
 
-text.setCharacterSize(24);
-text.setFillColor(sf::Color::White);
-text.setPosition(10.f, 10.f);
   Text messageText;
   Font font;
   font.loadFromFile("KOMIKAP_.ttf");//maybe change font
@@ -47,15 +34,18 @@ text.setPosition(10.f, 10.f);
       {
         window.close();
       }
+
       if(event.type == Event::MouseButtoPressed))
       {
         if(event.mouseButton.button == Mouse::Right)
         {
-          //Right click will zoomOut and call setCenter on the ComplexPlane object with the (x,y) pixel location of              the mouse click
+          plane.zoomOut();
+          plane.setCenter(Vector2i(event.mouseButton.x, event.mouseButton.y);
         }
         if(event.mouseButton.button == Mouse::Left)
         {
-          //Left click will zoomIn and call setCenter on the ComplexPlane object with the (x,y) pixel location of                the mouse click
+          plane.zoomIn();
+          plane.setCenter(event.mouseButton.x, event.mouseButton.y);
         }
       }
       if(event.type == Event::MouseMoved)
@@ -135,38 +125,10 @@ text.setPosition(10.f, 10.f);
   }
   window.display();
 }
-#include <SFML/Graphics.hpp>
-#include "ComplexPlane.h"
-
 
 
    
-
-    
-
-    // Start the main loop
-    while (window.isOpen()) {
-        // Handle Input segment
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            // Handle window close event
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-
-            // Handle mouse button pressed events
-            if (event.type == sf::Event::MouseButtonPressed) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    // Left click: zoom in
-                    complexPlane.zoomIn();
-                    complexPlane.setCenter(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
-                }
-                else if (event.mouseButton.button == sf::Mouse::Right) {
-                    // Right click: zoom out
-                    complexPlane.zoomOut();
-                    complexPlane.setCenter(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
-                }
-            }
+            
 
             // Handle mouse moved event
             if (event.type == sf::Event::MouseMoved) {
