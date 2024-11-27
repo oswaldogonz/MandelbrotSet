@@ -8,7 +8,7 @@ int main()
 {
   int width=VideoMode::getDesktopMode().width/2;
   int height=VideoMode::getDesktopMode().height/2;
-  videoMode vm(width, height);
+  VideoMode vm(width, height);
   RenderWindow window(vm, "Mandelbrot Set", Style::Default);
   ComplexPlane plane(width, height);
 
@@ -23,7 +23,7 @@ int main()
   while (window.isOpen())
   {
     Event event;
-    while(window.pollEvent(event))
+    while(window.pollEvent(event)
     {
       if(event.type==Event::Closed)
       {
@@ -44,7 +44,7 @@ int main()
       }
       if(event.type == Event::MouseMoved)
       {
-        plane.setMouseLocation(event.mouseMove.x,event.mouseMove.y);
+        plane.setMouseLocation(Vector2i(event.mouseMove.x,event.mouseMove.y));
       }
     }
     if(Keyboard::isKeyPressed(Keyboard::Escape))
