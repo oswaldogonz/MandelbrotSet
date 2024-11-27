@@ -2,6 +2,7 @@
 #include <cmath>
 #include <sstream>
 
+
 ComplexPlane::ComplexPlane(int pixelWidth, int pixelHeight)
 {
   m_pixel_size={pixelWidth, pixelHeight};
@@ -12,7 +13,6 @@ ComplexPlane::ComplexPlane(int pixelWidth, int pixelHeight)
   m_state=State::Calculating;
   m_vArray.setPrimitiveType(Points);
   m_vArray.resize(pixelWidth* pixelHeight);
-  
 }
 
 void ComplexPlane::draw(RenderTarget& target, RenderStates states) const
@@ -29,7 +29,7 @@ void ComplexPlane::updateRender()
       for(int j=0; j<m_pixel_size.x; j++)
       {
         m_vArray[j+i*m_pixel_size.x].position = { (float)j,(float)i };
-        Vector2f coordinate=mapPixelToCoords(vector2i(j,i));
+        Vector2f coordinate=mapPixelToCoords(Vector2i(j,i));
         int iteration=countIterations(coordinate);
         Uint8 r;
         Uint8 g;
@@ -38,10 +38,10 @@ void ComplexPlane::updateRender()
         m_vArray[j+i*m_pixel_size.x].color = { r,g,b };
       }
     }
-    m_state=State::Displaying;
+    m_state=State::DISPLAYING;
   }
 }
-  
+
 void ComplexPlane::zoomIn()
 {
   m_zoomCount++;
@@ -66,14 +66,14 @@ void ComplexPlane::setCenter(Vector2i mousePixel)
   m_state=State::Calculating;
 }
 
-void ComplexPlane::setMouseLocation(Vector2i mousPixel)
+void ComplexPlane::setMouseLocation(Vector2i mousePixel)
 {
-  m_mouseLocation=mapPixelToCoords(mousPixel);
+  m_mouseLocation=mapPixelToCoords(mousePixel);
 }
 
 void ComplexPlane::loadText(Text& text)
 {
-  ostringstream output;
+  stringstream output;
   output<<"Mandelbrot Set"<<endl;
   output<<"Center: ("<<m_plane_center.x<<","<<m_plane_center.y<<")"<<endl;
   output<<"Cursor: ("<<m_mouseLocation.x<<","<<m_mouseLocation.y<<")"<<endl;
@@ -81,41 +81,26 @@ void ComplexPlane::loadText(Text& text)
   output<<"Right-click to Zoom out"<<endl;
   text.setString(output.str());
 }
-int  ComplexPlane::countIterations(Vector2f coord)
+
+size_t ComplexPlane::countIterations(Vector2f coord)
 {
-    // Initialize z as the complex number 0 + 0i
     float zReal = 0.0f;
     float zImag = 0.0f;
-
     size_t iterations = 0;
-
-    // Iterate and check for escape
     while (iterations < MAX_ITER)
     {
-        // Calculate z^2 + c
         float zRealNew = zReal * zReal - zImag * zImag + coord.x;
         float zImagNew = 2.0f * zReal * zImag + coord.y;
-
-        // Check if the magnitude of z exceeds the escape radius (typically 2)
         if ((zRealNew * zRealNew + zImagNew * zImagNew) > 4.0f)
         {
-            // Point escapes, return the number of iterations
             return iterations;
         }
-
-        // Update z with the new values
         zReal = zRealNew;
         zImag = zImagNew;
-
-        // Increment iteration count
         iterations++;
     }
-
-    // If we reach the max iterations, the point is considered in the set
     return MAX_ITER;
 }
-
-
 
 void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 {
@@ -163,8 +148,7 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 
 Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel)
 {
-  double real=((mousePixel.x*1.0)/m_pixel_size.x)*m_plane_size.x+(m_plane_center.x - m_plane_size.x / 2.0);
-  double imaginary=((m_pixel_size.y-(mousePixel.y*1.0))/(m_pixel_size.y)*m_plane_size.y+(m_plane_center.y - m_plane_size.y / 2.0));
+  float real=((mousePixel.x*1.0)/m_pixel_size.x)*m_plane_size.x+(m_plane_center.x-m_plane_size.x/2.0);
+  float imaginary=((m_pixel_size.y-(mousePixel.y*1.0))/m_pixel_size.y)*m_plane_size.y+(m_plane_center.y-m_plane_size.y/2.0));
   return Vector2f(real,imaginary);
 }
-
