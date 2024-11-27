@@ -1,7 +1,4 @@
-
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <iostream>
 #include "ComplexPlane.h"
 
 using namespace sf;
@@ -9,33 +6,30 @@ using namespace std;
 
 int main()
 {
-  VideoMode vm(VideoMode::getDesktopMode().width/2, VideoMode::getDesktopMode().height/2);
+  int width=VideoMode::getDesktopMode().width/2;
+  int height=VideoMode::getDesktopMode().height/2;
+  videoMode vm(width, height);
   RenderWindow window(vm, "Mandelbrot Set", Style::Default);
+  ComplexPlane plane(width, height);
 
-  ComplexPlane plane(width, height);//figure out how to get height amd width
-
-  Text text;
   Font font;
-  font.loadFromFile("KOMIKAP_.ttf");//maybe change font
+  font.loadFromFile("KOMIKAP_.ttf");
+  
+  Text text;
   text.setFont(font);
-  text.setCharacterSize(50);
+  text.setCharacterSize(30);
   text.setFillColor(Color::White);
-
-  FloatRect textRect = text.getLocalBounds();
-  text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-  text.setPosition(1920 / 2.0f, 1080 / 2.0f);
-
+  text.setPosition(10, 10);
   while (window.isOpen())
   {
     Event event;
-    while (window.pollEvent(event))
+    while(window.pollEvent(event))
     {
-      if(event.type == Event::Closed)
+      if(event.type==Event::Closed)
       {
         window.close();
       }
-
-      if(event.type == Event::MouseButtoPressed))
+      if(event.type==Event::MouseButtonPressed))
       {
         if(event.mouseButton.button == Mouse::Right)
         {
@@ -50,7 +44,7 @@ int main()
       }
       if(event.type == Event::MouseMoved)
       {
-        plane.setMouseLocation(event.mouseMove.x,event.mouseMove.y)
+        plane.setMouseLocation(event.mouseMove.x,event.mouseMove.y);
       }
     }
     if(Keyboard::isKeyPressed(Keyboard::Escape))
@@ -58,22 +52,14 @@ int main()
       window.close();
     }
 
-    //Update Scene segment
-    //Call updateRender on the ComplexPlane object
-    //Call loadText on the ComplexPlane object
-    complexPlane.updateRender();
-    complexPlane.loadText(text);
+    plane.updateRender();
+    plane.loadText(text);
 
-    
-    //Draw Scene segment
-    //draw the ComplexPlane object
-    //draw the Text object
-    //Display the RenderWindow object
     window.clear();
-    plane.draw(window, RenderStates::Default);
+    window.draw(plane);
+    //plane.draw(window, RenderStates::Default);
     window.draw(text);
     window.display();
-    
   }
-  
+  return 0;
 }
