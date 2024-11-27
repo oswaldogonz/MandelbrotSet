@@ -149,6 +149,6 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel)
 {
   float real=((mousePixel.x*1.0)/m_pixel_size.x)*m_plane_size.x+(m_plane_center.x-m_plane_size.x/2.0);
-  float imaginary=((m_pixel_size.y-(mousePixel.y*1.0))/m_pixel_size.y)*m_plane_size.y+(m_plane_center.y-m_plane_size.y/2.0));
+  float imaginary=((m_pixel_size.y-(mousePixel.y*1.0))/m_pixel_size.y)*m_plane_size.y+(m_plane_center.y-m_plane_size.y/2.0);
   return Vector2f(real,imaginary);
 }
