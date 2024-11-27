@@ -1,9 +1,9 @@
 #ifndef COMPLEXPLANE_H
 #define COMPLEXPLANE_H
+
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+#include <sstream>
 #include <iostream>
-#include "ComplexPlane.h"
 
 using namespace sf;
 using namespace std;
@@ -14,7 +14,7 @@ const float BASE_HEIGHT = 4.0;
 const float BASE_ZOOM = 0.5;
 enum class State
 {
-  Calculating,
+  Calcuating,
   Displaying
 };
 
@@ -42,7 +42,4 @@ private:
   int m_zoomCount;
   float m_aspectRatio;
 };
-
-
-
 #endif 
