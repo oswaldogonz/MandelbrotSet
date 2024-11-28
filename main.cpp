@@ -19,7 +19,7 @@ int main()
   text.setFont(font);
   text.setCharacterSize(30);
   text.setFillColor(Color::White);
-  text.setPosition(10, 10);
+  text.setPosition(10.f, 10.f);
   while (window.isOpen())
   {
     Event event;
