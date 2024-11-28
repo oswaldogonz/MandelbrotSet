@@ -38,7 +38,7 @@ void ComplexPlane::updateRender()
         m_vArray[j+i*m_pixel_size.x].color = { r,g,b };
       }
     }
-    m_state=State::DISPLAYING;
+    m_state=State::Displaying;
   }
 }
 
