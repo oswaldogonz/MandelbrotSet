@@ -23,13 +23,13 @@ int main()
   while (window.isOpen())
   {
     Event event;
-    while(window.pollEvent(event)
+    while(window.pollEvent(event))
     {
       if(event.type==Event::Closed)
       {
         window.close();
       }
-      if(event.type==Event::MouseButtonPressed))
+      if(event.type==Event::MouseButtonPressed)
       {
         if(event.mouseButton.button == Mouse::Right)
         {
@@ -56,8 +56,7 @@ int main()
     plane.loadText(text);
 
     window.clear();
-    window.draw(plane);
-    //plane.draw(window, RenderStates::Default);
+    plane.draw(window, RenderStates::Default);
     window.draw(text);
     window.display();
   }
