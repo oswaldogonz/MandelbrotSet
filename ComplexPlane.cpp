@@ -82,7 +82,7 @@ void ComplexPlane::loadText(Text& text)
   text.setString(output.str());
 }
 
-size_t ComplexPlane::countIterations(Vector2f coord)
+int ComplexPlane::countIterations(Vector2f coord)
 {
     float zReal = 0.0f;
     float zImag = 0.0f;
