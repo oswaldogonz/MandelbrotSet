@@ -84,22 +84,17 @@ void ComplexPlane::loadText(Text& text)
 
 int ComplexPlane::countIterations(Vector2f coord)
 {
-    float zReal = 0.0f;
-    float zImag = 0.0f;
-    size_t iterations = 0;
-    while (iterations < MAX_ITER)
+    complex<double> c(coord.x, coord.y);
+    complex<double> z = c;
+    int iterations = 0;
+    while (abs(z) < 2.0 && iterations < MAX_ITER)
     {
-        float zRealNew = zReal * zReal - zImag * zImag + coord.x;
-        float zImagNew = 2.0f * zReal * zImag + coord.y;
-        if ((zRealNew * zRealNew + zImagNew * zImagNew) > 4.0f)
-        {
-            return iterations;
-        }
-        zReal = zRealNew;
-        zImag = zImagNew;
+        z = z * z + c;
         iterations++;
     }
-    return MAX_ITER;
+    return iterations;
+}
+
 }
 
 void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
